@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Sector Master - Municipal Beach Safety Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar('sectors')}"></div>
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Flash message -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <strong th:text="${successMessage}"></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Page Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">🏖️ Beach Sector Master</h2>
+            <p class="text-muted mb-0">Define and monitor public coastal zones and configure microbiological bacterial safety thresholds.</p>
+        </div>
+        <button type="button" class="btn btn-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#newSectorModal">
+            + Add New Sector
+        </button>
+    </div>
+
+    <!-- Sectors Table Card -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">Configured Municipal Beach Zones</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sector Name</th>
+                        <th>Location</th>
+                        <th>Description</th>
+                        <th>Safety Threshold (CFU/100ml)</th>
+                        <th>Current Water Status</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sector : ${sectors}">
+                        <td th:text="${sector.id}">1</td>
+                        <td class="fw-bold" th:text="${sector.sectorName}">Central Public Beach Zone 1</td>
+                        <td th:text="${sector.location}">Marina Promenade Bay</td>
+                        <td class="text-muted small" th:text="${sector.description}">Primary municipal beach</td>
+                        <td>
+                            <strong th:text="${sector.safetyThreshold} + ' CFU'">100 CFU</strong>
+                        </td>
+                        <td>
+                            <span class="status-pill"
+                                  th:classappend="${sector.currentStatus.name() == 'GREEN' ? 'status-green' : (sector.currentStatus.name() == 'YELLOW' ? 'status-yellow' : 'status-red')}"
+                                  th:text="${sector.currentStatus.name() == 'GREEN' ? '🟢 GREEN (Safe)' : (sector.currentStatus.name() == 'YELLOW' ? '🟡 YELLOW (Warning)' : '🔴 RED (Unsafe)')}">
+                                GREEN
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" th:classappend="${sector.active ? 'bg-success' : 'bg-secondary'}"
+                                  th:text="${sector.active ? 'ACTIVE' : 'INACTIVE'}">ACTIVE</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/water-quality}" class="btn btn-sm btn-outline-info">Record Test</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(sectors)}">
+                        <td colspan="8" class="text-center text-muted py-4">No beach sectors found. Click "+ Add New Sector" to create one.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal: Add New Sector -->
+<div class="modal fade" id="newSectorModal" tabindex="-1" aria-labelledby="newSectorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form th:action="@{/sectors/create}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="newSectorModalLabel">Add New Beach Sector</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Sector Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="sectorName" placeholder="e.g. South Bay Public Beach Zone 3" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Location</label>
+                        <input type="text" class="form-control" name="location" placeholder="e.g. South Pierhead Promenade">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Public swimming, watercraft, and lifeguard patrol area"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Bacterial Safety Threshold (CFU/100ml) <span class="text-danger">*</span></label>
+                        <input type="number" step="1" class="form-control" name="safetyThreshold" value="100.0" required>
+                        <div class="form-text">If samples exceed this threshold, the zone automatically transitions to YELLOW or RED alert.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Sector</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <span>Municipal Smart Public Beach Safety &amp; Water Quality Monitoring System</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:replace="~{fragments/navbar :: roleScript}"></script>
+</body>
+</html>

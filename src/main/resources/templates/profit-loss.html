@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit & Loss Statement - Municipal Beach Safety Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar('profit-loss')}"></div>
+
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">💵 Municipal Profit &amp; Loss Statement</h2>
+            <p class="text-muted mb-0">Statement of municipal beach operations revenue, permit income, and safety expenditures.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button onclick="window.print()" class="btn btn-outline-secondary">🖨️ Print Statement</button>
+            <a th:href="@{/reports}" class="btn btn-outline-primary">&larr; Back to Reports</a>
+        </div>
+    </div>
+
+    <!-- P&L Statement Card -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <div class="text-center mb-4 border-bottom pb-3">
+                <h4 class="fw-bold mb-0">MUNICIPALITY OF COASTAL DISTRICT</h4>
+                <div class="text-muted">Beach Safety &amp; Recreation Department</div>
+                <div class="fw-semibold mt-1">Statement of Operational Surplus / Deficit (Profit &amp; Loss)</div>
+                <div class="small text-muted" th:text="'For Period Ending: ' + ${#temporals.format(#temporals.createNow(), 'MMMM d, yyyy')}">For Period Ending</div>
+            </div>
+
+            <!-- INCOME SECTION -->
+            <div class="mb-4">
+                <h5 class="fw-bold text-success border-bottom pb-2">1. OPERATING REVENUES (INCOME)</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                        <tr th:each="inc : ${report.incomeItems}">
+                            <td class="ps-3" th:text="${inc.accountName}">Beach Event Permit Revenue</td>
+                            <td class="text-end fw-semibold" th:text="'₹' + #numbers.formatDecimal(inc.amount, 0, 'COMMA', 2, 'POINT')">₹50,000.00</td>
+                        </tr>
+                        <tr class="table-light fw-bold">
+                            <td>TOTAL OPERATING REVENUE (A)</td>
+                            <td class="text-end text-success fs-6" th:text="'₹' + #numbers.formatDecimal(report.totalIncome, 0, 'COMMA', 2, 'POINT')">₹70,000.00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- EXPENSES SECTION -->
+            <div class="mb-4">
+                <h5 class="fw-bold text-danger border-bottom pb-2">2. OPERATIONAL &amp; SAFETY EXPENDITURES</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <tbody>
+                        <tr th:each="exp : ${report.expenseItems}">
+                            <td class="ps-3" th:text="${exp.accountName}">Lab Testing Expenses</td>
+                            <td class="text-end fw-semibold" th:text="'₹' + #numbers.formatDecimal(exp.amount, 0, 'COMMA', 2, 'POINT')">₹15,000.00</td>
+                        </tr>
+                        <tr class="table-light fw-bold">
+                            <td>TOTAL OPERATING EXPENSES (B)</td>
+                            <td class="text-end text-danger fs-6" th:text="'₹' + #numbers.formatDecimal(report.totalExpenses, 0, 'COMMA', 2, 'POINT')">₹25,000.00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NET SURPLUS / DEFICIT -->
+            <div class="p-3 rounded border" th:classappend="${report.netProfitOrLoss >= 0 ? 'bg-success bg-opacity-10 border-success' : 'bg-danger bg-opacity-10 border-danger'}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="fw-bold mb-0" th:classappend="${report.netProfitOrLoss >= 0 ? 'text-success' : 'text-danger'}"
+                            th:text="${report.netProfitOrLoss >= 0 ? 'NET MUNICIPAL SURPLUS (PROFIT)' : 'NET MUNICIPAL DEFICIT (LOSS)'}">
+                            NET MUNICIPAL SURPLUS
+                        </h4>
+                        <div class="text-muted small">Calculation: Total Operating Income (A) minus Total Operating Expenses (B)</div>
+                    </div>
+                    <div class="fs-3 fw-bold" th:classappend="${report.netProfitOrLoss >= 0 ? 'text-success' : 'text-danger'}"
+                         th:text="'₹' + #numbers.formatDecimal(report.netProfitOrLoss, 0, 'COMMA', 2, 'POINT')">
+                        ₹45,000.00
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="container text-center">
+        <span>Municipal Smart Public Beach Safety &amp; Water Quality Monitoring System</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:replace="~{fragments/navbar :: roleScript}"></script>
+</body>
+</html>

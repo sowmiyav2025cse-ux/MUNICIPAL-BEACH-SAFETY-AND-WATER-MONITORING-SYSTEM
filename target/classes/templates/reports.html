@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Hub - Municipal Beach Safety Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar('reports')}"></div>
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">📊 Municipal Safety &amp; Financial Reports</h2>
+            <p class="text-muted mb-0">Consolidated reporting hub for water quality compliance, profit &amp; loss, budget allocations, and balance sheet.</p>
+        </div>
+        <div class="d-flex gap-2 mt-2 mt-md-0">
+            <a th:href="@{/profit-loss}" class="btn btn-outline-success fw-bold">💵 P&amp;L Statement</a>
+            <a th:href="@{/balance-sheet}" class="btn btn-outline-primary fw-bold">🏛️ Balance Sheet</a>
+        </div>
+    </div>
+
+    <!-- Section 1: Water Quality Safety Report -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">🧪 Beach Water Quality Compliance Report</h5>
+            <span class="badge bg-primary">Microbiological Analysis</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Beach Zone</th>
+                        <th>Bacterial Count (CFU/100ml)</th>
+                        <th>pH</th>
+                        <th>Temp</th>
+                        <th>Turbidity</th>
+                        <th>Safety Status</th>
+                        <th>Advisory Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${waterQualityReports}">
+                        <td th:text="${r.sampleDate}">2026-09-27</td>
+                        <td class="fw-bold" th:text="${r.sectorName}">Central Beach</td>
+                        <td>
+                            <strong th:class="${r.status == 'RED' ? 'text-danger' : (r.status == 'YELLOW' ? 'text-warning' : 'text-success')}"
+                                    th:text="${r.bacterialCount} + ' CFU'">80 CFU</strong>
+                        </td>
+                        <td th:text="${r.pH}">7.8</td>
+                        <td th:text="${r.temperature} + '°C'">24.5°C</td>
+                        <td th:text="${r.turbidity} + ' NTU'">2.1 NTU</td>
+                        <td>
+                            <span class="status-pill"
+                                  th:classappend="${r.status == 'GREEN' ? 'status-green' : (r.status == 'YELLOW' ? 'status-yellow' : 'status-red')}"
+                                  th:text="${r.status}">GREEN</span>
+                        </td>
+                        <td class="fw-semibold"
+                            th:classappend="${r.status == 'RED' ? 'text-danger' : (r.status == 'YELLOW' ? 'text-warning' : 'text-success')}"
+                            th:text="${r.safetyAlertMessage}">Water Quality Safe</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Budget Variance Report -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">🎯 Sector Budget vs Actual Expense Report</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-custom mb-0">
+                    <thead>
+                    <tr>
+                        <th>Beach Zone</th>
+                        <th>FY</th>
+                        <th>Planned Budget (₹)</th>
+                        <th>Actual Spending (₹)</th>
+                        <th>Variance (₹)</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="b : ${budgetReports}">
+                        <td class="fw-bold" th:text="${b.beachZone}">Central Beach</td>
+                        <td th:text="${b.financialYear}">2026-2027</td>
+                        <td th:text="'₹' + #numbers.formatDecimal(b.plannedBudget, 0, 'COMMA', 2, 'POINT')">₹100,000.00</td>
+                        <td class="text-danger" th:text="'₹' + #numbers.formatDecimal(b.actualSpending, 0, 'COMMA', 2, 'POINT')">₹75,000.00</td>
+                        <td>
+                            <strong th:class="${b.variance >= 0 ? 'text-success' : 'text-danger'}"
+                                    th:text="'₹' + #numbers.formatDecimal(b.variance, 0, 'COMMA', 2, 'POINT')">₹25,000.00</strong>
+                        </td>
+                        <td>
+                            <span class="badge" th:classappend="${b.variance >= 0 ? 'bg-success' : 'bg-danger'}"
+                                  th:text="${b.variance >= 0 ? 'Within Budget' : 'Over Budget'}">Within Budget</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Financial Highlights (P&L and Balance Sheet Cards) -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 text-success">💵 Profit &amp; Loss Summary</h5>
+                    <a th:href="@{/profit-loss}" class="btn btn-sm btn-outline-success">Detailed View</a>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Revenue / Income:</span>
+                        <strong class="text-success" th:text="'₹' + #numbers.formatDecimal(profitLoss.totalIncome, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Operating Expenses:</span>
+                        <strong class="text-danger" th:text="'₹' + #numbers.formatDecimal(profitLoss.totalExpenses, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fs-5">
+                        <span class="fw-bold">Net Operating Surplus:</span>
+                        <strong th:class="${profitLoss.netProfitOrLoss >= 0 ? 'text-success' : 'text-danger'}"
+                                th:text="'₹' + #numbers.formatDecimal(profitLoss.netProfitOrLoss, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-primary">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 text-primary">🏛️ Balance Sheet Summary</h5>
+                    <a th:href="@{/balance-sheet}" class="btn btn-sm btn-outline-primary">Detailed View</a>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Assets (Crafts, Gear, Cash, Bank):</span>
+                        <strong class="text-primary" th:text="'₹' + #numbers.formatDecimal(balanceSheet.totalAssets, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Liabilities (Creditors, Payables):</span>
+                        <strong class="text-danger" th:text="'₹' + #numbers.formatDecimal(balanceSheet.totalLiabilities, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fs-5">
+                        <span class="fw-bold">Municipal Net Worth:</span>
+                        <strong class="text-success" th:text="'₹' + #numbers.formatDecimal(balanceSheet.netWorth, 0, 'COMMA', 2, 'POINT')">₹0.00</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="container text-center">
+        <span>Municipal Smart Public Beach Safety &amp; Water Quality Monitoring System</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:replace="~{fragments/navbar :: roleScript}"></script>
+</body>
+</html>

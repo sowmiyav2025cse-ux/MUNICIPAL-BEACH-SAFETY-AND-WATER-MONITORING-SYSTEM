@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<nav th:fragment="navbar(activeTab)" class="navbar navbar-expand-xl navbar-dark navbar-custom sticky-top">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <span class="fs-4">🌊</span>
+            <div>
+                <span>Beach Safety Pro</span>
+                <span class="brand-badge ms-1">Municipal MVP</span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'dashboard'} ? 'active' : ''" th:href="@{/dashboard}">📊 Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'sectors'} ? 'active' : ''" th:href="@{/sectors}">🏖️ Beach Sectors</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'water-quality'} ? 'active' : ''" th:href="@{/water-quality}">🧪 Water Quality</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'contacts'} ? 'active' : ''" th:href="@{/contacts}">👥 Contacts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'products'} ? 'active' : ''" th:href="@{/products}">📦 Products/Services</a>
+                </li>
+
+                <!-- Procurement & Invoicing Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" th:classappend="${activeTab == 'pos' or activeTab == 'bills'} ? 'active' : ''" href="#" id="procurementDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        🛒 Procurement
+                    </a>
+                    <ul class="dropdown-menu shadow" aria-labelledby="procurementDrop">
+                        <li><a class="dropdown-item" th:href="@{/purchase-orders}">📋 Purchase Orders</a></li>
+                        <li><a class="dropdown-item" th:href="@{/vendor-bills}">🧾 Vendor Bills</a></li>
+                    </ul>
+                </li>
+
+                <!-- Sales & Revenue Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" th:classappend="${activeTab == 'sos' or activeTab == 'invoices'} ? 'active' : ''" href="#" id="salesDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        💰 Revenue & Permits
+                    </a>
+                    <ul class="dropdown-menu shadow" aria-labelledby="salesDrop">
+                        <li><a class="dropdown-item" th:href="@{/sales-orders}">📑 Sales Orders</a></li>
+                        <li><a class="dropdown-item" th:href="@{/customer-invoices}">💳 Customer Invoices</a></li>
+                    </ul>
+                </li>
+
+                <!-- Finance Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" th:classappend="${activeTab == 'budgets' or activeTab == 'accounts' or activeTab == 'transactions'} ? 'active' : ''" href="#" id="financeDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        🏛️ Finance
+                    </a>
+                    <ul class="dropdown-menu shadow" aria-labelledby="financeDrop">
+                        <li><a class="dropdown-item" th:href="@{/budgets}">🎯 Beach Budgets</a></li>
+                        <li><a class="dropdown-item" th:href="@{/accounts}">📖 Chart of Accounts</a></li>
+                        <li><a class="dropdown-item" th:href="@{/transactions}">⚖️ General Ledger Txns</a></li>
+                    </ul>
+                </li>
+
+                <!-- Reports Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" th:classappend="${activeTab == 'reports' or activeTab == 'profit-loss' or activeTab == 'balance-sheet'} ? 'active' : ''" href="#" id="reportsDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        📈 Reports
+                    </a>
+                    <ul class="dropdown-menu shadow" aria-labelledby="reportsDrop">
+                        <li><a class="dropdown-item" th:href="@{/reports}">📊 All Reports Summary</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/profit-loss}">💵 Profit &amp; Loss Statement</a></li>
+                        <li><a class="dropdown-item" th:href="@{/balance-sheet}">🏛️ Balance Sheet</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Role Selector / Switcher -->
+            <div class="d-flex align-items-center gap-2 mt-2 mt-xl-0">
+                <span class="role-badge" id="roleBadge">
+                    👤 Active Role: <strong id="activeRoleText">Admin / Safety Director</strong>
+                </span>
+                <button type="button" class="btn btn-sm btn-outline-light" onclick="toggleRole()">
+                    Switch Role
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Role Switch Script Fragment -->
+<script th:fragment="roleScript">
+    function toggleRole() {
+        const textElem = document.getElementById('activeRoleText');
+        if (!textElem) return;
+        if (textElem.innerText.includes('Admin')) {
+            textElem.innerText = 'Accountant / Invoicing User';
+            sessionStorage.setItem('currentRole', 'Accountant');
+        } else {
+            textElem.innerText = 'Admin / Safety Director';
+            sessionStorage.setItem('currentRole', 'Admin');
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = sessionStorage.getItem('currentRole');
+        const textElem = document.getElementById('activeRoleText');
+        if (saved && textElem) {
+            textElem.innerText = saved === 'Accountant' ? 'Accountant / Invoicing User' : 'Admin / Safety Director';
+        }
+    });
+</script>
+</body>
+</html>

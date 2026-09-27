@@ -1,0 +1,615 @@
+{
+  "info": {
+    "name": "Municipal Smart Public Beach Safety & Water Quality Monitoring System",
+    "_postman_id": "beach-safety-api-collection-v1",
+    "description": "Complete REST API collection for Municipal Beach Safety, Water Quality Monitoring, Invoicing, Procurement, Budgeting, and Accounting.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Beach Sectors",
+      "item": [
+        {
+          "name": "Get All Beach Sectors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/sectors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "sectors"]
+            }
+          }
+        },
+        {
+          "name": "Get Sector by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/sectors/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "sectors", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Beach Sector",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorName\": \"South Bay Surf Zone 3\",\n  \"location\": \"South Pierhead Recreation Area\",\n  \"description\": \"Recreational surfing and family coastal zone\",\n  \"safetyThreshold\": 100.0,\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/sectors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "sectors"]
+            }
+          }
+        },
+        {
+          "name": "Update Beach Sector",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorName\": \"Central Public Beach Zone 1 (Updated)\",\n  \"location\": \"Marina Promenade Bay\",\n  \"description\": \"Expanded family swimming sector\",\n  \"safetyThreshold\": 100.0,\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/sectors/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "sectors", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Water Quality Samples",
+      "item": [
+        {
+          "name": "Get All Water Samples",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/samples",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "samples"]
+            }
+          }
+        },
+        {
+          "name": "Record Sample - SAFE (GREEN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorId\": 1,\n  \"sampleDate\": \"2026-09-27\",\n  \"bacterialCount\": 75.0,\n  \"pH\": 7.8,\n  \"temperature\": 24.0,\n  \"turbidity\": 1.8,\n  \"remarks\": \"Morning routine testing - Optimal safe condition\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/samples",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "samples"]
+            }
+          }
+        },
+        {
+          "name": "Record Sample - WARNING (YELLOW)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorId\": 1,\n  \"sampleDate\": \"2026-09-27\",\n  \"bacterialCount\": 125.0,\n  \"pH\": 7.9,\n  \"temperature\": 25.5,\n  \"turbidity\": 3.0,\n  \"remarks\": \"Elevated count following rain runoff\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/samples",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "samples"]
+            }
+          }
+        },
+        {
+          "name": "Record Sample - RED ALERT (UNSAFE)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorId\": 1,\n  \"sampleDate\": \"2026-09-27\",\n  \"bacterialCount\": 185.0,\n  \"pH\": 8.2,\n  \"temperature\": 26.5,\n  \"turbidity\": 4.8,\n  \"remarks\": \"Exceeds 1.5x threshold! Triggers automated RED ALERT on dashboard\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/beach/samples",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "beach", "samples"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Contacts",
+      "item": [
+        {
+          "name": "Get All Contacts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/contacts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contacts"]
+            }
+          }
+        },
+        {
+          "name": "Create Testing Lab Vendor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Apex Marine Environmental Laboratory\",\n  \"contactType\": \"TESTING_LAB_VENDOR\",\n  \"email\": \"lab@apexmarine.org\",\n  \"phone\": \"+91-98765-66778\",\n  \"address\": \"55 Science Harbor Road\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/contacts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contacts"]
+            }
+          }
+        },
+        {
+          "name": "Create Event Organizer Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sun & Sand Beach Volleyball League\",\n  \"contactType\": \"CUSTOMER\",\n  \"email\": \"director@sandvolleyball.in\",\n  \"phone\": \"+91-98765-44332\",\n  \"address\": \"22 Coastal Arena Way\",\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/contacts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "contacts"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Products & Services",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Create Product / Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Commercial Beach Filming & Shoot Permit\",\n  \"type\": \"SERVICE\",\n  \"description\": \"Daily commercial coastal video/media production clearance\",\n  \"unitPrice\": 35000.0,\n  \"active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Purchase Orders",
+      "item": [
+        {
+          "name": "Get All Purchase Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/purchase-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchase-orders"]
+            }
+          }
+        },
+        {
+          "name": "Create Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"poNumber\": \"PO-2026-0003\",\n  \"vendorId\": 1,\n  \"productId\": 2,\n  \"quantity\": 4,\n  \"unitPrice\": 5000.0,\n  \"orderDate\": \"2026-09-27\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/purchase-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "purchase-orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Vendor Bills & Payments",
+      "item": [
+        {
+          "name": "Get All Vendor Bills",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vendor-bills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vendor-bills"]
+            }
+          }
+        },
+        {
+          "name": "Create Vendor Bill",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"billNumber\": \"BILL-2026-0002\",\n  \"purchaseOrderId\": 2,\n  \"vendorId\": 3,\n  \"billDate\": \"2026-09-27\",\n  \"amount\": 150000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vendor-bills",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vendor-bills"]
+            }
+          }
+        },
+        {
+          "name": "Record Vendor Bill Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vendor-bills/1/pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "vendor-bills", "1", "pay"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Sales Orders",
+      "item": [
+        {
+          "name": "Get All Sales Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sales-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sales-orders"]
+            }
+          }
+        },
+        {
+          "name": "Create Commercial Sales Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderNumber\": \"SO-2026-0002\",\n  \"customerId\": 5,\n  \"productId\": 1,\n  \"quantity\": 1,\n  \"unitPrice\": 25000.0,\n  \"orderDate\": \"2026-09-27\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sales-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sales-orders"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Customer Invoices & Payments",
+      "item": [
+        {
+          "name": "Get All Customer Invoices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer-invoices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customer-invoices"]
+            }
+          }
+        },
+        {
+          "name": "Create Customer Invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invoiceNumber\": \"INV-2026-0002\",\n  \"salesOrderId\": 1,\n  \"customerId\": 5,\n  \"invoiceDate\": \"2026-09-27\",\n  \"amount\": 25000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customer-invoices",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customer-invoices"]
+            }
+          }
+        },
+        {
+          "name": "Record Customer Invoice Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customer-invoices/1/pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customer-invoices", "1", "pay"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Accounts & Financial Transactions",
+      "item": [
+        {
+          "name": "Get All Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts"]
+            }
+          }
+        },
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountCode\": \"1005\",\n  \"accountName\": \"Beach Drone Surveillance Assets\",\n  \"accountType\": \"ASSET\",\n  \"openingBalance\": 75000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts"]
+            }
+          }
+        },
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"]
+            }
+          }
+        },
+        {
+          "name": "Record Manual Journal Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionDate\": \"2026-09-27\",\n  \"transactionType\": \"BANK\",\n  \"referenceNumber\": \"JV-2026-0009\",\n  \"description\": \"Routine life-buoy line replacement\",\n  \"debitAccountId\": 10,\n  \"creditAccountId\": 4,\n  \"amount\": 5000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Budgets",
+      "item": [
+        {
+          "name": "Get All Budgets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/budgets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "budgets"]
+            }
+          }
+        },
+        {
+          "name": "Create or Update Budget",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectorId\": 1,\n  \"financialYear\": \"2026-2027\",\n  \"plannedAmount\": 150000.0,\n  \"actualAmount\": 80000.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/budgets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "budgets"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Reports",
+      "item": [
+        {
+          "name": "Get Water Quality Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/water-quality",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "water-quality"]
+            }
+          }
+        },
+        {
+          "name": "Get Profit & Loss Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/profit-loss",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "profit-loss"]
+            }
+          }
+        },
+        {
+          "name": "Get Budget Variance Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/budget",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "budget"]
+            }
+          }
+        },
+        {
+          "name": "Get Balance Sheet Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/balance-sheet",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "balance-sheet"]
+            }
+          }
+        },
+        {
+          "name": "Get Dashboard Live Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reports", "dashboard"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
